@@ -12,7 +12,7 @@ main{max-width:980px;padding-bottom:40px}
 .pl{font-size:14px;color:var(--mute)}.pl b{color:var(--ink)}
 .tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;padding:12px;border-radius:12px;border:2px solid var(--green);background:#fff;color:var(--green);font-weight:700}.tabs .on{background:var(--green);color:#fff}
 .opt{display:flex;gap:8px;align-items:center;margin-bottom:10px;color:var(--mute);font-size:15px}.opt input{width:18px;height:18px;accent-color:var(--green)}
-.row{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-left:8px solid var(--red);border-radius:14px;padding:14px;margin:10px 0;cursor:pointer;transition:.15s;position:relative}
+.row{display:flex;justify-content:flex-start;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-left:8px solid var(--red);border-radius:14px;padding:14px;margin:10px 0;cursor:pointer;transition:.15s;position:relative}
 .row:hover{box-shadow:0 4px 14px #0001}
 .row.fin{border-left-color:#2f8a5b;background:#f1f8f3;opacity:.7}.row.fin .nm{text-decoration:line-through}
 .row input{width:30px;height:30px;accent-color:#2f8a5b;flex:none;margin-top:4px;cursor:pointer}
@@ -33,7 +33,7 @@ main{max-width:980px;padding-bottom:40px}
 <div class="top"><div class="in">
 <div class="hd"><img src="/logo.png" alt="Paddie's Verjaardag Frituur">
 <div class="stats"><div><b id="sP">0</b>personen</div><div><b id="sI">0</b>stuks totaal</div><div><b id="sR">0</b>nog te bestellen</div></div></div>
-<div class="bar"><i id="bar" style="width:0"></i></div><div class="pl" id="pl"></div>
+<div class="bar"><i id="pbar" style="width:0"></i></div><div class="pl" id="pl"></div>
 </div></div>
 <main>
 <div class="tabs"><button id="t1" class="on">Te bestellen bij de frituur</button><button id="t2">Per persoon</button></div>
@@ -52,7 +52,7 @@ function totals(){const m=new Map();
 function render(){
   const t=totals(),all=t.reduce((s,e)=>s+e.qty,0),done=t.reduce((s,e)=>s+Math.min(e.qty,checked[e.k]||0),0);
   $('sP').textContent=orders.length;$('sI').textContent=all;$('sR').textContent=all-done;
-  $('bar').style.width=(all?done/all*100:0)+'%';
+  $("pbar").style.width=(all?done/all*100:0)+'%';
   $('pl').innerHTML=all?`<b>${done}</b> van <b>${all}</b> stuks ingegeven bij de frituur`+(done==all?' – alles is besteld 🎉':''):'';
   $('hideWrap').hidden=tab!=1;
   if(!orders.length){$('v').innerHTML='<div class="empty">Nog geen bestellingen.</div>';return}
