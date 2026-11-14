@@ -71,31 +71,3 @@ dialog{background:var(--card);color:var(--ink)}
 [data-theme=fris] nav{background:#fff;box-shadow:0 2px 10px #0001}
 [data-theme=fris] nav a{color:var(--green);background:var(--green2)}
 [data-theme=fris] nav a:hover{background:var(--gold)}
-
-/* thema donker */
-[data-theme=donker]{--bg:#0f1713;--card:#18231d;--ink:#eef3ee;--mute:#9bb0a2;--line:#2a3a31;--green:#7fd6a0;--green2:#233a2d;--red:#ff6a4d}
-[data-theme=donker] header{border-bottom:2px solid var(--gold)}
-[data-theme=donker] header img{background:#fff;border-radius:14px;padding:6px 14px}
-[data-theme=donker] nav{background:#0b110e;border-bottom:1px solid var(--line)}
-[data-theme=donker] nav a{color:var(--ink)}
-[data-theme=donker] .card{border-radius:16px}
-[data-theme=donker] .btn{color:#1a0d0a;background:var(--gold);border-radius:12px}
-[data-theme=donker] .btn:hover{background:#ffd264}
-[data-theme=donker] #bar{border-top-color:var(--gold)}
-[data-theme=donker] #bar .btn{background:var(--gold);color:#1a0d0a}
-[data-theme=donker] .btn.ghost{background:transparent;color:var(--ink);border-color:var(--mute)}
-
-/* thema retro: dikke randen, harde schaduw, geel en rood */
-[data-theme=retro]{--bg:#ffe27a;--card:#fffdf4;--ink:#1d1d1b;--line:#1d1d1b;--green:#14532d;--green2:#bfe3c9;--red:#d62828;--mute:#4a4a42}
-[data-theme=retro] header{border-bottom:4px solid #1d1d1b}
-[data-theme=retro] nav{background:#d62828;border-bottom:4px solid #1d1d1b}
-[data-theme=retro] nav a{background:#fffdf4;color:#1d1d1b;border:2px solid #1d1d1b}
-[data-theme=retro] nav a:hover{background:var(--gold)}
-[data-theme=retro] .card{border:3px solid #1d1d1b;border-radius:14px;box-shadow:6px 6px 0 #1d1d1b}
-[data-theme=retro] .card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #1d1d1b}
-[data-theme=retro] .btn{border:3px solid #1d1d1b;border-radius:10px;box-shadow:3px 3px 0 #1d1d1b;background:var(--gold);color:#1d1d1b;font-weight:800}
-[data-theme=retro] .btn:hover{background:#ffd042}
-[data-theme=retro] h2{display:inline-block;background:#d62828;color:#fff;padding:2px 14px;border:3px solid #1d1d1b;border-radius:10px;box-shadow:4px 4px 0 #1d1d1b;transform:rotate(-1deg);justify-self:start}
-[data-theme=retro] #bar{border-top:4px solid #1d1d1b;background:#d62828}
-[data-theme=retro] #bar .btn{background:#fffdf4;color:#1d1d1b}
-[data-theme=retro] dialog{border:4px solid #1d1d1b}
