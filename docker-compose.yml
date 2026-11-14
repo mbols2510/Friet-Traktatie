@@ -1,0 +1,16 @@
+services:
+  friet:
+    image: ghcr.io/mbols2510/friet-traktatie:latest
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      ADMIN_USER: admin
+      # Kies zelf een wachtwoord: ADMIN_PASSWORD=iets docker compose up -d
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-verjaardag}
+    volumes:
+      - friet-data:/data
+
+volumes:
+  friet-data:

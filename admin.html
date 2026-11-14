@@ -1,0 +1,32 @@
+<!doctype html><html lang="nl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin – Verjaardag Frituur</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/style.css">
+<style>main{max-width:1000px}.tabs{display:flex;gap:8px;margin:12px 0}.tabs button{flex:1}.tabs .on{background:var(--green);color:#fff}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}td,th{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--green2)}.n{font-size:22px;font-weight:700;color:var(--green);white-space:nowrap}.o{margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.o h3{margin:0 0 6px}.o ul{margin:0;padding-left:20px}.o small{color:var(--mute)}.del{border:0;background:none;color:var(--red);font-weight:700;float:right}
+.stats{display:flex;gap:12px;margin:12px 0}.stats div{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px}.stats b{font-size:28px;color:var(--green);display:block}</style>
+<header><img src="/logo.png" alt="Paddie's Verjaardag Frituur" style="max-width:240px"><p>Beheer</p></header>
+<main><div class="stats"><div><b id="sO">0</b>bestellingen</div><div><b id="sI">0</b>items in totaal</div></div>
+<div class="tabs"><button class="btn on" id="t1">Per persoon</button><button class="btn ghost" id="t2">Totaaloverzicht (om te bestellen)</button></div>
+<div id="v"></div></main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let orders=[],tab=1;
+const desc=i=>Object.values(i.choices).map(o=>o.join(', ')).concat(i.note?['"'+i.note+'"']:[]).join(' · ');
+function render(){
+  $('sO').textContent=orders.length;$('sI').textContent=orders.reduce((s,o)=>s+o.items.reduce((a,i)=>a+i.qty,0),0);
+  if(!orders.length){$('v').innerHTML='<p>Nog geen bestellingen.</p>';return}
+  if(tab==1)$('v').innerHTML=orders.map(o=>`<div class="o"><button class="del" data-id="${o.id}">Verwijder</button><h3>${esc(o.name)} <small>${new Date(o.created_at).toLocaleString('nl-BE')}</small></h3><ul>${o.items.map(i=>`<li><b>${i.qty}× ${esc(i.name)}</b> <small>${esc(desc(i))}</small></li>`).join('')}</ul></div>`).join('');
+  else{
+    const m=new Map();
+    for(const o of orders)for(const i of o.items){const k=i.name+'|'+desc(i);const e=m.get(k)||{i,qty:0,who:[]};e.qty+=i.qty;e.who.push(o.name+(i.qty>1?' ('+i.qty+')':''));m.set(k,e)}
+    $('v').innerHTML='<table><tr><th>Aantal</th><th>Product en opties</th><th>Wie</th></tr>'+[...m.values()].sort((a,b)=>a.i.name.localeCompare(b.i.name)).map(e=>`<tr><td class="n">${e.qty}×</td><td><b>${esc(e.i.name)}</b><br><small>${esc(desc(e.i))}</small></td><td>${esc(e.who.join(', '))}</td></tr>`).join('')+'</table>';
+  }
+}
+async function load(){orders=await(await fetch('/api/admin/orders')).json();render()}
+$('t1').onclick=()=>{tab=1;$('t1').className='btn on';$('t2').className='btn ghost';render()};
+$('t2').onclick=()=>{tab=2;$('t2').className='btn on';$('t1').className='btn ghost';render()};
+$('v').onclick=async e=>{const id=e.target.dataset.id;if(id&&confirm('Deze bestelling verwijderen?')){await fetch('/api/admin/orders/'+id,{method:'DELETE'});load()}};
+load();setInterval(load,15000);
+</script>
