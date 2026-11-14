@@ -28,6 +28,7 @@ main{max-width:980px;padding-bottom:40px}
 .it{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--line)}.it .q{font-size:20px;min-width:44px}
 .it.fin{opacity:.55}.it .nm{font-size:17px}
 .del{border:0;background:none;color:var(--mute);font-size:14px;margin-left:auto;text-decoration:underline}
+.cat{font-size:20px;margin:22px 0 4px}
 .empty{text-align:center;padding:40px;color:var(--mute)}
 </style>
 <div class="top"><div class="in">
@@ -43,12 +44,13 @@ main{max-width:980px;padding-bottom:40px}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let orders=[],checked={},tab=1;
+const pos=new Map(),cat=new Map(); // volgorde en categorie zoals op de bestelpagina
 const opts=i=>Object.values(i.choices).flat();
 const key=i=>i.name+'|'+Object.values(i.choices).map(o=>o.join(', ')).join(' · ')+(i.note?' · "'+i.note+'"':'');
 const chips=i=>opts(i).map(o=>`<span class="chip">${esc(o)}</span>`).join('')+(i.note?`<span class="chip note">${esc(i.note)}</span>`:'');
 function totals(){const m=new Map();
   for(const o of orders)for(const i of o.items){const k=key(i),e=m.get(k)||{k,i,qty:0,who:[]};e.qty+=i.qty;e.who.push(o.name+(i.qty>1?' ('+i.qty+')':''));m.set(k,e)}
-  return [...m.values()].sort((a,b)=>a.i.name.localeCompare(b.i.name))}
+  return [...m.values()].sort((a,b)=>(pos.get(a.i.productId)??1e9)-(pos.get(b.i.productId)??1e9)||a.k.localeCompare(b.k))}
 function render(){
   const t=totals(),all=t.reduce((s,e)=>s+e.qty,0),done=t.reduce((s,e)=>s+Math.min(e.qty,checked[e.k]||0),0);
   $('sP').textContent=orders.length;$('sI').textContent=all;$('sR').textContent=all-done;
@@ -57,9 +59,10 @@ function render(){
   $('hideWrap').hidden=tab!=1;
   if(!orders.length){$('v').innerHTML='<div class="empty">Nog geen bestellingen.</div>';return}
   if(tab==1){
+    let last;
     const rows=t.filter(e=>!($('hide').checked&&(checked[e.k]||0)>=e.qty));
-    $('v').innerHTML=rows.length?rows.map(e=>{const d=Math.min(e.qty,checked[e.k]||0),full=d>=e.qty;
-      return `<div class="row ${full?"fin":""}" data-k="${esc(e.k)}"><input type="checkbox" ${full?'checked':''} aria-label="Ingegeven bij frituur"><div class="q">${e.qty}×</div><div class="bd"><div class="nm">${esc(e.i.name)}${d>0&&!full?`<span class="new">nog ${e.qty-d} te bestellen</span>`:''}</div><div class="chips">${chips(e.i)||'<span class="chip">geen opties</span>'}</div><div class="who">${esc(e.who.join(', '))}</div></div></div>`}).join(''):'<div class="empty">Alles is ingegeven 🎉</div>';
+    $('v').innerHTML=rows.length?rows.map(e=>{const d=Math.min(e.qty,checked[e.k]||0),full=d>=e.qty,c=cat.get(e.i.productId),h=c&&c!==last?(last=c,`<h2 class="cat">${esc(c)}</h2>`):'';
+      return h+`<div class="row ${full?"fin":""}" data-k="${esc(e.k)}"><input type="checkbox" ${full?'checked':''} aria-label="Ingegeven bij frituur"><div class="q">${e.qty}×</div><div class="bd"><div class="nm">${esc(e.i.name)}${d>0&&!full?`<span class="new">nog ${e.qty-d} te bestellen</span>`:''}</div><div class="chips">${chips(e.i)||'<span class="chip">geen opties</span>'}</div><div class="who">${esc(e.who.join(', '))}</div></div></div>`}).join(''):'<div class="empty">Alles is ingegeven 🎉</div>';
   }else{
     $('v').innerHTML=orders.map(o=>{const ok=o.items.every(i=>(checked[key(i)]||0)>=t.find(e=>e.k==key(i)).qty);
       return `<div class="p ${ok?'ok':''}"><h3>${esc(o.name)}<span class="badge ${ok?'b-ok':'b-no'}">${ok?'Alles ingegeven':'Nog niet alles ingegeven'}</span><small>${new Date(o.created_at).toLocaleString('nl-BE',{weekday:'short',hour:'2-digit',minute:'2-digit'})}</small><button class="del" data-id="${o.id}">Verwijder</button></h3>`+
@@ -92,5 +95,6 @@ $('v').onclick=async e=>{
   gen++;saving++;checked[k]=qty;render();
   try{await put(k,qty)}finally{saving--}
 };
-load();setInterval(load,15000);
+fetch('/api/menu').then(r=>r.json()).then(m=>m.forEach(c=>c.products.forEach(p=>{pos.set(p.id,pos.size);cat.set(p.id,c.name)}))).catch(()=>{}).finally(load);
+setInterval(load,15000);
 </script>
