@@ -512,11 +512,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -528,11 +529,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -544,11 +546,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -560,11 +563,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -576,11 +580,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -592,11 +597,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -608,11 +614,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -624,11 +631,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -640,11 +648,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -656,11 +665,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -672,11 +682,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -688,11 +699,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -704,11 +716,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -720,11 +733,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -736,11 +750,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -752,11 +767,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -768,11 +784,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -784,11 +801,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -800,11 +818,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -816,11 +835,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -832,11 +852,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -848,11 +869,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -864,11 +886,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -880,11 +903,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    },
@@ -896,11 +920,12 @@
     "groups": [
      {
       "name": "Keuze supplement",
-      "single": false,
+      "single": true,
       "options": [
        "Grote pot",
        "Mini potje"
-      ]
+      ],
+      "required": true
      }
     ]
    }

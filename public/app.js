@@ -24,8 +24,8 @@ async function init() {
 function openProduct(id) {
   const p = find(id), f = $('pf');
   f.innerHTML = `<h3>${esc(p.name)}</h3>${p.description ? `<p>${esc(p.description)}</p>` : ''}` +
-    p.groups.map((g, i) => `<fieldset><legend>${esc(g.name)} <small>${g.single ? 'kies er één' : 'meerdere mogelijk'} (optioneel)</small></legend><div class="opts">` +
-      g.options.map(o => `<label><input type="${g.single ? 'radio' : 'checkbox'}" name="g${i}" value="${esc(o)}">${esc(o)}</label>`).join('') + '</div></fieldset>').join('') +
+    p.groups.map((g, i) => `<fieldset><legend>${esc(g.name)} <small>${g.required ? 'kies er één (verplicht)' : (g.single ? 'kies er één' : 'meerdere mogelijk') + ' (optioneel)'}</small></legend><div class="opts">` +
+      g.options.map(o => `<label><input type="${g.single ? 'radio' : 'checkbox'}" name="g${i}" value="${esc(o)}"${g.required ? ' required' : ''}>${esc(o)}</label>`).join('') + '</div></fieldset>').join('') +
     `<textarea name="note" rows="2" maxlength="200" placeholder="Opmerking (optioneel)"></textarea>
     <div class="row"><div class="qty"><button type="button" data-d="-1" aria-label="Minder">−</button><b id="qv">1</b><button type="button" data-d="1" aria-label="Meer">+</button></div>
     <span><button type="button" class="btn ghost" id="x">Annuleer</button> <button class="btn" value="add">Toevoegen</button></span></div>`;

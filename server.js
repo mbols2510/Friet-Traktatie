@@ -53,7 +53,10 @@ export function validateOrder(b) {
     const choices = {};
     for (const g of p.groups) {
       const picked = it.choices?.[g.name];
-      if (!picked?.length) continue;
+      if (!picked?.length) {
+        if (g.required) return { error: `Kies een optie bij ${p.name}.` };
+        continue;
+      }
       if (!Array.isArray(picked) || picked.some(o => !g.options.includes(o)) || (g.single && picked.length > 1))
         return { error: `Ongeldige keuze bij ${p.name}.` };
       choices[g.name] = [...new Set(picked)];

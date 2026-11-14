@@ -30,3 +30,10 @@ test('ongeldige URL geeft 400 en laat de server leven', async () => {
     assert.equal((await fetch('http://localhost:3777/api/admin/orders')).status, 401);
   } finally { p.kill(); }
 });
+
+test('koude saus in potje: grootte is verplicht en maar één', () => {
+  const g = 'Keuze supplement', item = choices => ({ name: 'x', items: [{ productId: '586723', qty: 1, choices }] });
+  assert.ok(validateOrder(item({})).error);
+  assert.ok(validateOrder(item({ [g]: ['Grote pot', 'Mini potje'] })).error);
+  assert.ok(!validateOrder(item({ [g]: ['Mini potje'] })).error);
+});
