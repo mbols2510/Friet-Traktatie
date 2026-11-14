@@ -66,16 +66,31 @@ function render(){
       o.items.map(i=>{const d=(checked[key(i)]||0)>=t.find(e=>e.k==key(i)).qty;return `<div class="it ${d?"fin":""}"><div class="q">${i.qty}×</div><div class="bd"><div class="nm">${esc(i.name)} ${d?'✓':''}</div><div class="chips">${chips(i)}</div></div></div>`}).join('')+'</div>'}).join('');
   }
 }
-async function load(){[orders,checked]=await Promise.all([fetch('/api/admin/orders').then(r=>r.json()),fetch('/api/admin/checked').then(r=>r.json())]);render()}
+// gen/saving: een herlaad die vóór een vinkje startte mag dat vinkje niet terugdraaien
+let gen=0,saving=0;
+const put=(key,qty)=>fetch('/api/admin/checked',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({key,qty})});
+const fetchAll=()=>Promise.all([fetch('/api/admin/orders').then(r=>r.json()),fetch('/api/admin/checked').then(r=>r.json())]);
+async function load(){const g=gen,[o,c]=await fetchAll();if(g!==gen||saving)return;orders=o;checked=c;render()}
 const setTab=n=>{tab=n;$('t1').className=n==1?'on':'';$('t2').className=n==2?'on':'';render()};
 $('t1').onclick=()=>setTab(1);$('t2').onclick=()=>setTab(2);$('hide').onchange=render;
 $('v').onclick=async e=>{
   const id=e.target.dataset.id;
-  if(id){if(confirm('Deze bestelling verwijderen?')){await fetch('/api/admin/orders/'+id,{method:'DELETE'});load()}return}
+  if(id){
+    if(!confirm('Deze bestelling verwijderen?'))return;
+    gen++;saving++;
+    try{
+      await fetch('/api/admin/orders/'+id,{method:'DELETE'});
+      [orders,checked]=await fetchAll();
+      // vinkjes mogen nooit hoger blijven dan wat er nu besteld is, anders lijkt een latere bestelling al ingegeven
+      const t=new Map(totals().map(x=>[x.k,x.qty]));
+      for(const [k,q] of Object.entries(checked)){const m=Math.min(q,t.get(k)||0);if(m!==q){checked[k]=m;await put(k,m)}}
+    }finally{saving--}
+    render();return;
+  }
   const row=e.target.closest('.row');if(!row)return;
   const k=row.dataset.k,tot=totals().find(x=>x.k==k),full=(checked[k]||0)>=tot.qty,qty=full?0:tot.qty;
-  checked[k]=qty;render();
-  await fetch('/api/admin/checked',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k,qty})});
+  gen++;saving++;checked[k]=qty;render();
+  try{await put(k,qty)}finally{saving--}
 };
 load();setInterval(load,15000);
 </script>

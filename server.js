@@ -6,7 +6,8 @@ import { DatabaseSync } from 'node:sqlite';
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'verjaardag';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) { console.error('Zet de omgevingsvariabele ADMIN_PASSWORD.'); process.exit(1); }
 const DB_PATH = process.env.DB_PATH || './storage/orders.db';
 const root = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const menu = JSON.parse(fs.readFileSync(path.join(root, 'data/menu.json'), 'utf8'));
@@ -69,9 +70,9 @@ const readBody = req => new Promise((ok, no) => {
 });
 
 const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url, 'http://x');
-  const p = decodeURIComponent(url.pathname);
   try {
+    const url = new URL(req.url, 'http://x');
+    const p = decodeURIComponent(url.pathname); // gooit bij ongeldige %-codes: valt zo in de catch (400)
     if (p === '/healthz') return send(res, 200, 'ok', 'text/plain');
     if (p === '/api/menu') return send(res, 200, menu);
     if (p === '/api/orders' && req.method === 'POST') {

@@ -10,7 +10,7 @@ ADMIN_PASSWORD=kies-een-wachtwoord docker compose up -d
 ```
 
 - Collega's bestellen op `http://<server>:3000/`
-- Jij beheert op `http://<server>:3000/admin` (gebruiker `admin`, wachtwoord uit `ADMIN_PASSWORD`, standaard `verjaardag`)
+- Jij beheert op `http://<server>:3000/admin` (gebruiker `admin`, wachtwoord uit `ADMIN_PASSWORD`, verplicht in te stellen)
   - *Per persoon*: wie wat besteld heeft
   - *Totaaloverzicht*: samengeteld per product en opties, om door te geven aan de frituur
 
