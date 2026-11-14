@@ -1,0 +1,23 @@
+services:
+  friet:
+    image: ghcr.io/mbols2510/friet-traktatie:latest
+    container_name: friet-traktatie
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Brussels
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ./data:/data
+    networks:
+      LAN_NETWORK:
+        ipv4_address: 192.168.128.119
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.friet.rule=Host(`frituur.tech-bol.be`)
+      - traefik.http.routers.friet.entrypoints=websecure
+      - traefik.http.routers.friet.tls=true
+      - traefik.http.services.friet.loadbalancer.server.port=3000
+networks:
+  LAN_NETWORK:
+    external: true

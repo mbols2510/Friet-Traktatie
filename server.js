@@ -18,6 +18,9 @@ db.exec(`CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, items TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')))`);
 
+// Per product+opties: hoeveel stuks de admin al bij de frituur heeft ingegeven.
+db.exec('CREATE TABLE IF NOT EXISTS checked (key TEXT PRIMARY KEY, qty INTEGER NOT NULL)');
+
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png',
   '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.json': 'application/json' };
 
@@ -86,6 +89,15 @@ const server = http.createServer(async (req, res) => {
       if (p === '/api/admin/orders' && req.method === 'GET') {
         const rows = db.prepare('SELECT * FROM orders ORDER BY id').all();
         return send(res, 200, rows.map(r => ({ ...r, items: JSON.parse(r.items) })));
+      }
+      if (p === '/api/admin/checked' && req.method === 'GET')
+        return send(res, 200, Object.fromEntries(db.prepare('SELECT key, qty FROM checked').all().map(r => [r.key, r.qty])));
+      if (p === '/api/admin/checked' && req.method === 'PUT') {
+        const { key, qty } = await readBody(req);
+        if (typeof key !== 'string' || !key || key.length > 500 || !Number.isInteger(qty) || qty < 0 || qty > 1000)
+          return send(res, 400, { error: 'Ongeldig verzoek.' });
+        db.prepare('INSERT INTO checked (key, qty) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET qty = excluded.qty').run(key, qty);
+        return send(res, 200, { ok: true });
       }
       const m = p.match(/^\/api\/admin\/orders\/(\d+)$/);
       if (m && req.method === 'DELETE') {

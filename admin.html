@@ -1,32 +1,81 @@
 <!doctype html><html lang="nl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin – Verjaardag Frituur</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/style.css">
-<style>main{max-width:1000px}.tabs{display:flex;gap:8px;margin:12px 0}.tabs button{flex:1}.tabs .on{background:var(--green);color:#fff}
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}td,th{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{background:var(--green2)}.n{font-size:22px;font-weight:700;color:var(--green);white-space:nowrap}.o{margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.o h3{margin:0 0 6px}.o ul{margin:0;padding-left:20px}.o small{color:var(--mute)}.del{border:0;background:none;color:var(--red);font-weight:700;float:right}
-.stats{display:flex;gap:12px;margin:12px 0}.stats div{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px}.stats b{font-size:28px;color:var(--green);display:block}</style>
-<header><img src="/logo.png" alt="Paddie's Verjaardag Frituur" style="max-width:240px"><p>Beheer</p></header>
-<main><div class="stats"><div><b id="sO">0</b>bestellingen</div><div><b id="sI">0</b>items in totaal</div></div>
-<div class="tabs"><button class="btn on" id="t1">Per persoon</button><button class="btn ghost" id="t2">Totaaloverzicht (om te bestellen)</button></div>
+<style>
+body{background:#f3f5f2}
+main{max-width:980px;padding-bottom:40px}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 12px #0001}
+.top .in{max-width:980px;margin:auto;padding:12px 14px}
+.hd{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+.hd img{height:48px;width:auto}
+.stats{display:flex;gap:18px;font-size:14px;color:var(--mute)}.stats b{display:block;font-size:26px;line-height:1;color:var(--green)}
+.bar{height:12px;border-radius:99px;background:#e6ebe6;overflow:hidden;margin:12px 0 4px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f8a5b,#46b36f);transition:width .3s}
+.pl{font-size:14px;color:var(--mute)}.pl b{color:var(--ink)}
+.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;padding:12px;border-radius:12px;border:2px solid var(--green);background:#fff;color:var(--green);font-weight:700}.tabs .on{background:var(--green);color:#fff}
+.opt{display:flex;gap:8px;align-items:center;margin-bottom:10px;color:var(--mute);font-size:15px}.opt input{width:18px;height:18px;accent-color:var(--green)}
+.row{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-left:8px solid var(--red);border-radius:14px;padding:14px;margin:10px 0;cursor:pointer;transition:.15s;position:relative}
+.row:hover{box-shadow:0 4px 14px #0001}
+.row.fin{border-left-color:#2f8a5b;background:#f1f8f3;opacity:.7}.row.fin .nm{text-decoration:line-through}
+.row input{width:30px;height:30px;accent-color:#2f8a5b;flex:none;margin-top:4px;cursor:pointer}
+.q{font-size:32px;font-weight:800;color:var(--red);min-width:62px;line-height:1.1}.fin .q{color:#2f8a5b}
+.bd{flex:1;min-width:0}.nm{font-size:19px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}.chip{background:#eef2ee;border-radius:99px;padding:3px 10px;font-size:14px}.chip.note{background:#fff3cf}
+.who{font-size:14px;color:var(--mute)}
+.new{background:var(--gold);color:#3b2a00;border-radius:99px;padding:2px 10px;font-size:13px;font-weight:700;margin-left:8px}
+.p{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.p.ok{border-color:#2f8a5b}
+.p h3{margin:0 0 8px;font-size:21px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.p h3 small{font-weight:400;color:var(--mute);font-size:14px}
+.badge{font-size:13px;border-radius:99px;padding:2px 10px;font-weight:700}.b-ok{background:#d8efe0;color:#1d6a43}.b-no{background:#fde0dd;color:#9b2a22}
+.it{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--line)}.it .q{font-size:20px;min-width:44px}
+.it.fin{opacity:.55}.it .nm{font-size:17px}
+.del{border:0;background:none;color:var(--mute);font-size:14px;margin-left:auto;text-decoration:underline}
+.empty{text-align:center;padding:40px;color:var(--mute)}
+</style>
+<div class="top"><div class="in">
+<div class="hd"><img src="/logo.png" alt="Paddie's Verjaardag Frituur">
+<div class="stats"><div><b id="sP">0</b>personen</div><div><b id="sI">0</b>stuks totaal</div><div><b id="sR">0</b>nog te bestellen</div></div></div>
+<div class="bar"><i id="bar" style="width:0"></i></div><div class="pl" id="pl"></div>
+</div></div>
+<main>
+<div class="tabs"><button id="t1" class="on">Te bestellen bij de frituur</button><button id="t2">Per persoon</button></div>
+<label class="opt" id="hideWrap"><input type="checkbox" id="hide"> Verberg wat ik al heb ingegeven</label>
 <div id="v"></div></main>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let orders=[],tab=1;
-const desc=i=>Object.values(i.choices).map(o=>o.join(', ')).concat(i.note?['"'+i.note+'"']:[]).join(' · ');
+let orders=[],checked={},tab=1;
+const opts=i=>Object.values(i.choices).flat();
+const key=i=>i.name+'|'+Object.values(i.choices).map(o=>o.join(', ')).join(' · ')+(i.note?' · "'+i.note+'"':'');
+const chips=i=>opts(i).map(o=>`<span class="chip">${esc(o)}</span>`).join('')+(i.note?`<span class="chip note">${esc(i.note)}</span>`:'');
+function totals(){const m=new Map();
+  for(const o of orders)for(const i of o.items){const k=key(i),e=m.get(k)||{k,i,qty:0,who:[]};e.qty+=i.qty;e.who.push(o.name+(i.qty>1?' ('+i.qty+')':''));m.set(k,e)}
+  return [...m.values()].sort((a,b)=>a.i.name.localeCompare(b.i.name))}
 function render(){
-  $('sO').textContent=orders.length;$('sI').textContent=orders.reduce((s,o)=>s+o.items.reduce((a,i)=>a+i.qty,0),0);
-  if(!orders.length){$('v').innerHTML='<p>Nog geen bestellingen.</p>';return}
-  if(tab==1)$('v').innerHTML=orders.map(o=>`<div class="o"><button class="del" data-id="${o.id}">Verwijder</button><h3>${esc(o.name)} <small>${new Date(o.created_at).toLocaleString('nl-BE')}</small></h3><ul>${o.items.map(i=>`<li><b>${i.qty}× ${esc(i.name)}</b> <small>${esc(desc(i))}</small></li>`).join('')}</ul></div>`).join('');
-  else{
-    const m=new Map();
-    for(const o of orders)for(const i of o.items){const k=i.name+'|'+desc(i);const e=m.get(k)||{i,qty:0,who:[]};e.qty+=i.qty;e.who.push(o.name+(i.qty>1?' ('+i.qty+')':''));m.set(k,e)}
-    $('v').innerHTML='<table><tr><th>Aantal</th><th>Product en opties</th><th>Wie</th></tr>'+[...m.values()].sort((a,b)=>a.i.name.localeCompare(b.i.name)).map(e=>`<tr><td class="n">${e.qty}×</td><td><b>${esc(e.i.name)}</b><br><small>${esc(desc(e.i))}</small></td><td>${esc(e.who.join(', '))}</td></tr>`).join('')+'</table>';
+  const t=totals(),all=t.reduce((s,e)=>s+e.qty,0),done=t.reduce((s,e)=>s+Math.min(e.qty,checked[e.k]||0),0);
+  $('sP').textContent=orders.length;$('sI').textContent=all;$('sR').textContent=all-done;
+  $('bar').style.width=(all?done/all*100:0)+'%';
+  $('pl').innerHTML=all?`<b>${done}</b> van <b>${all}</b> stuks ingegeven bij de frituur`+(done==all?' – alles is besteld 🎉':''):'';
+  $('hideWrap').hidden=tab!=1;
+  if(!orders.length){$('v').innerHTML='<div class="empty">Nog geen bestellingen.</div>';return}
+  if(tab==1){
+    const rows=t.filter(e=>!($('hide').checked&&(checked[e.k]||0)>=e.qty));
+    $('v').innerHTML=rows.length?rows.map(e=>{const d=Math.min(e.qty,checked[e.k]||0),full=d>=e.qty;
+      return `<div class="row ${full?"fin":""}" data-k="${esc(e.k)}"><input type="checkbox" ${full?'checked':''} aria-label="Ingegeven bij frituur"><div class="q">${e.qty}×</div><div class="bd"><div class="nm">${esc(e.i.name)}${d>0&&!full?`<span class="new">nog ${e.qty-d} te bestellen</span>`:''}</div><div class="chips">${chips(e.i)||'<span class="chip">geen opties</span>'}</div><div class="who">${esc(e.who.join(', '))}</div></div></div>`}).join(''):'<div class="empty">Alles is ingegeven 🎉</div>';
+  }else{
+    $('v').innerHTML=orders.map(o=>{const ok=o.items.every(i=>(checked[key(i)]||0)>=t.find(e=>e.k==key(i)).qty);
+      return `<div class="p ${ok?'ok':''}"><h3>${esc(o.name)}<span class="badge ${ok?'b-ok':'b-no'}">${ok?'Alles ingegeven':'Nog niet alles ingegeven'}</span><small>${new Date(o.created_at).toLocaleString('nl-BE',{weekday:'short',hour:'2-digit',minute:'2-digit'})}</small><button class="del" data-id="${o.id}">Verwijder</button></h3>`+
+      o.items.map(i=>{const d=(checked[key(i)]||0)>=t.find(e=>e.k==key(i)).qty;return `<div class="it ${d?"fin":""}"><div class="q">${i.qty}×</div><div class="bd"><div class="nm">${esc(i.name)} ${d?'✓':''}</div><div class="chips">${chips(i)}</div></div></div>`}).join('')+'</div>'}).join('');
   }
 }
-async function load(){orders=await(await fetch('/api/admin/orders')).json();render()}
-$('t1').onclick=()=>{tab=1;$('t1').className='btn on';$('t2').className='btn ghost';render()};
-$('t2').onclick=()=>{tab=2;$('t2').className='btn on';$('t1').className='btn ghost';render()};
-$('v').onclick=async e=>{const id=e.target.dataset.id;if(id&&confirm('Deze bestelling verwijderen?')){await fetch('/api/admin/orders/'+id,{method:'DELETE'});load()}};
+async function load(){[orders,checked]=await Promise.all([fetch('/api/admin/orders').then(r=>r.json()),fetch('/api/admin/checked').then(r=>r.json())]);render()}
+const setTab=n=>{tab=n;$('t1').className=n==1?'on':'';$('t2').className=n==2?'on':'';render()};
+$('t1').onclick=()=>setTab(1);$('t2').onclick=()=>setTab(2);$('hide').onchange=render;
+$('v').onclick=async e=>{
+  const id=e.target.dataset.id;
+  if(id){if(confirm('Deze bestelling verwijderen?')){await fetch('/api/admin/orders/'+id,{method:'DELETE'});load()}return}
+  const row=e.target.closest('.row');if(!row)return;
+  const k=row.dataset.k,tot=totals().find(x=>x.k==k),full=(checked[k]||0)>=tot.qty,qty=full?0:tot.qty;
+  checked[k]=qty;render();
+  await fetch('/api/admin/checked',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k,qty})});
+};
 load();setInterval(load,15000);
 </script>
